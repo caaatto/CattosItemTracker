@@ -1,0 +1,10 @@
+{
+  "wow_path": "G:/World of Warcraft/_classic_era_",
+  "auto_start": true,
+  "update_interval": 5,
+  "api_url": "https://clip.jetzt/api/connect",
+  "api_key": "",
+  "enable_api": true,
+  "main_character": "",
+  "only_send_main": true
+}

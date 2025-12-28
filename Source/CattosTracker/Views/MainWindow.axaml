@@ -1,0 +1,145 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:CattosTracker.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
+        x:Class="CattosTracker.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Width="600" Height="450"
+        CanResize="False"
+        Title="🐱 Catto's Equipment Tracker"
+        Background="#1a1a1a"
+        Icon="/Assets/icon.ico">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid Margin="12" RowDefinitions="Auto,Auto,*">
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Text="🐱 Catto's Equipment Tracker" Classes="Title"/>
+            <TextBlock Text="Modern WoW Equipment Tracking • /reload nach Änderungen!" Classes="Subtitle" Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <!-- Status Bar -->
+        <Border Grid.Row="1" Classes="Card" Margin="0,0,0,8">
+            <Grid Margin="10,8" ColumnDefinitions="Auto,*,Auto,Auto">
+
+                <!-- Status Indicator -->
+                <Ellipse Grid.Column="0" Width="12" Height="12" Fill="{Binding StatusColor}" Margin="0,0,8,0"/>
+                <TextBlock Grid.Column="1" Text="{Binding StatusText}" FontWeight="SemiBold" FontSize="11" VerticalAlignment="Center" Foreground="#e0e0e0"/>
+
+                <!-- Manual Refresh Button -->
+                <Button Grid.Column="2"
+                        Content="🔄 Refresh"
+                        Click="RefreshButton_Click"
+                        Padding="6,2"
+                        FontSize="10"
+                        Background="#4CAF50"
+                        Foreground="White"
+                        BorderThickness="0"
+                        CornerRadius="3"
+                        Margin="0,0,4,0"/>
+
+                <!-- Force Sync Button -->
+                <Button Grid.Column="3"
+                        Content="📤 Sync"
+                        Click="SyncButton_Click"
+                        Padding="6,2"
+                        FontSize="10"
+                        Background="#2196F3"
+                        Foreground="White"
+                        BorderThickness="0"
+                        CornerRadius="3"/>
+
+                <!-- Status Display -->
+                
+
+                
+
+                
+            </Grid>
+        </Border>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="2" ColumnDefinitions="200,*">
+
+            <!-- Left Panel - Characters -->
+            <Border Grid.Column="0" Classes="Card" Margin="0,0,15,0">
+                <Grid RowDefinitions="Auto,Auto,*,Auto">
+                    <!-- Header -->
+                    <Border Grid.Row="0" Classes="CardHeader">
+                        <TextBlock Text="Characters" Classes="CardTitle"/>
+                    </Border>
+
+                    <!-- Main Character Display -->
+                    <Border Grid.Row="1" Background="#2a2a2a" Margin="12,12,12,8" Padding="8" CornerRadius="4">
+                        <TextBlock FontSize="10" Foreground="#8b5cf6">
+                            <Run Text="⭐ Main: "/>
+                            <Run Text="{Binding MainCharacterName}" Foreground="#e0e0e0"/>
+                        </TextBlock>
+                    </Border>
+
+                    <!-- Character List -->
+                    <ListBox Grid.Row="2"
+                             ItemsSource="{Binding AllCharacters}"
+                             SelectedItem="{Binding SelectedCharacter}"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Margin="12,8">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding CharacterName}"
+                                           FontSize="10"
+                                           Foreground="#e0e0e0"
+                                           Padding="4,2"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!-- Set as Main Button - Simple Click Event -->
+                    <Button Grid.Row="3"
+                            Name="SetAsMainButton"
+                            Content="⭐ Als Main markieren"
+                            Click="SetAsMainButton_Click"
+                            Margin="12"
+                            Padding="6,5"
+                            FontSize="10"
+                            Background="#8b5cf6"
+                            Foreground="White"
+                            BorderThickness="0"
+                            CornerRadius="4"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            IsEnabled="{Binding SelectedCharacter, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                </Grid>
+            </Border>
+
+            <!-- Right Panel - Equipment Details -->
+            <Border Grid.Column="1" Classes="Card">
+                <StackPanel>
+                    <!-- Header -->
+                    <Border Classes="CardHeader">
+                        <TextBlock Text="Equipment Details" Classes="CardTitle"/>
+                    </Border>
+
+                    <!-- Equipment Display -->
+                    <ScrollViewer MaxHeight="250" Margin="16">
+                        <TextBox Text="{Binding EquipmentText}"
+                                 IsReadOnly="True"
+                                 TextWrapping="Wrap"
+                                 Background="#1a1a1a"
+                                 BorderThickness="0"
+                                 FontFamily="Consolas"
+                                 FontSize="12"
+                                 Foreground="#e0e0e0"
+                                 Padding="8"/>
+                    </ScrollViewer>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

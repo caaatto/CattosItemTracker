@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{B8EFCA5F-814F-285C-A8CB-F00F14650265}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CattosTracker", "Source\CattosTracker\CattosTracker.csproj", "{C49686C2-29B4-ED42-280D-B3F4AF58A6D9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C49686C2-29B4-ED42-280D-B3F4AF58A6D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C49686C2-29B4-ED42-280D-B3F4AF58A6D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C49686C2-29B4-ED42-280D-B3F4AF58A6D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C49686C2-29B4-ED42-280D-B3F4AF58A6D9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C49686C2-29B4-ED42-280D-B3F4AF58A6D9} = {B8EFCA5F-814F-285C-A8CB-F00F14650265}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E00CC57B-F686-409F-AF9C-B576578361AE}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(findstr:*)",
+      "Bash(xcopy:*)",
+      "Bash(robocopy:*)",
+      "Bash(dir:*)",
+      "Bash(dotnet run:*)",
+      "Bash(del \"C:\\Users\\Keanu\\Documents\\CattosItemTracker\\Source\\CattosTracker\\TestLuaParser.cs\")",
+      "Bash(dotnet build:*)",
+      "Bash(timeout 10 dotnet run:*)",
+      "Bash(timeout 8 dotnet run:*)",
+      "Bash(timeout 5 dotnet run:*)",
+      "Bash(timeout 6 dotnet run:*)",
+      "Bash(dotnet publish:*)",
+      "Bash(copy config.json Releaseconfig.json /Y)",
+      "Bash(dotnet restore:*)",
+      "Bash(powershell:*)",
+      "Bash(curl:*)",
+      "Bash(CattosTracker.exe)",
+      "Bash(.CattosTracker.exe)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

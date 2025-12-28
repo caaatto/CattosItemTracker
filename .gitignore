@@ -1,0 +1,45 @@
+# Build output
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+
+# Auto folder (contains build output)
+AUTO/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+.vscode/
+
+# Rider
+.idea/
+
+# Config files with sensitive data
+config.json
+.env
+*.env
+
+# Test files
+TestParser.ps1
+TestLuaParser.cs
+
+# Equipment history (user data)
+equipment_history.json
+
+# NuGet
+packages/
+*.nupkg
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
