@@ -18,7 +18,11 @@
       "Bash(powershell:*)",
       "Bash(curl:*)",
       "Bash(CattosTracker.exe)",
-      "Bash(.CattosTracker.exe)"
+      "Bash(.CattosTracker.exe)",
+      "Bash(git commit:*)",
+      "Bash(gh repo create:*)",
+      "Bash(git push:*)",
+      "Bash(git remote set-url:*)"
     ],
     "deny": [],
     "ask": []
