@@ -67,6 +67,12 @@ public class ApiClient
             Console.WriteLine($"[ApiClient] Only send main: {_onlySendMain}");
             Console.WriteLine($"[ApiClient] Characters to send: {charactersToSend.Count}");
 
+            if (_onlySendMain && string.IsNullOrEmpty(_mainCharacter))
+            {
+                Console.WriteLine("[ApiClient] WARNING: only_send_main is true but no main character set - nothing will be sent!");
+                Console.WriteLine("[ApiClient] Please select a main character in the app first!");
+            }
+
             foreach (var character in charactersToSend)
             {
                 var snapshot = character.LatestSnapshot;
@@ -140,7 +146,7 @@ public class ApiClient
                 // Map German class names to English
                 var classMapping = new Dictionary<string, string>
                 {
-                    // German to English
+                    // German to English (male forms)
                     {"Krieger", "Warrior"},
                     {"Paladin", "Paladin"},
                     {"Jäger", "Hunter"},
@@ -151,6 +157,15 @@ public class ApiClient
                     {"Hexenmeister", "Warlock"},
                     {"Druide", "Druid"},
                     {"Todesritter", "Death Knight"},
+                    // German to English (female forms where different)
+                    {"Kriegerin", "Warrior"},
+                    {"Jägerin", "Hunter"},
+                    {"Schurkin", "Rogue"},
+                    {"Priesterin", "Priest"},
+                    {"Schamanin", "Shaman"},
+                    {"Magierin", "Mage"},
+                    {"Hexenmeisterin", "Warlock"},
+                    {"Druidin", "Druid"},
                     // English to English (passthrough)
                     {"Warrior", "Warrior"},
                     {"Hunter", "Hunter"},

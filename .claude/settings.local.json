@@ -22,7 +22,9 @@
       "Bash(git commit:*)",
       "Bash(gh repo create:*)",
       "Bash(git push:*)",
-      "Bash(git remote set-url:*)"
+      "Bash(git remote set-url:*)",
+      "Bash(copy config.json Standaloneconfig.json /Y)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

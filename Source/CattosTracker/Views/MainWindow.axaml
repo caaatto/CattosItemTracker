@@ -26,14 +26,26 @@
 
         <!-- Status Bar -->
         <Border Grid.Row="1" Classes="Card" Margin="0,0,0,8">
-            <Grid Margin="10,8" ColumnDefinitions="Auto,*,Auto,Auto">
+            <Grid Margin="10,8" ColumnDefinitions="Auto,*,Auto,Auto,Auto">
 
                 <!-- Status Indicator -->
                 <Ellipse Grid.Column="0" Width="12" Height="12" Fill="{Binding StatusColor}" Margin="0,0,8,0"/>
                 <TextBlock Grid.Column="1" Text="{Binding StatusText}" FontWeight="SemiBold" FontSize="11" VerticalAlignment="Center" Foreground="#e0e0e0"/>
 
-                <!-- Manual Refresh Button -->
+                <!-- Select WoW Path Button -->
                 <Button Grid.Column="2"
+                        Content="📁 WoW-Pfad"
+                        Click="SelectWowPath_Click"
+                        Padding="6,2"
+                        FontSize="10"
+                        Background="#FF9800"
+                        Foreground="White"
+                        BorderThickness="0"
+                        CornerRadius="3"
+                        Margin="0,0,4,0"/>
+
+                <!-- Manual Refresh Button -->
+                <Button Grid.Column="3"
                         Content="🔄 Refresh"
                         Click="RefreshButton_Click"
                         Padding="6,2"
@@ -45,7 +57,7 @@
                         Margin="0,0,4,0"/>
 
                 <!-- Force Sync Button -->
-                <Button Grid.Column="3"
+                <Button Grid.Column="4"
                         Content="📤 Sync"
                         Click="SyncButton_Click"
                         Padding="6,2"

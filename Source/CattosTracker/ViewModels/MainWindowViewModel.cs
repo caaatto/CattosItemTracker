@@ -47,36 +47,51 @@ public class MainWindowViewModel : ViewModelBase
         // Initialize empty collections first
         LoadCharacters();
 
-        // FORCE START MONITORING - NO CONDITIONS
-        Console.WriteLine("[CONSTRUCTOR] FORCING StartMonitoring()");
-        StatusText = "Starting...";
-        StatusColor = "#FFA500";
-
-        // Start monitoring after a short delay to ensure UI is ready
-        Task.Run(async () =>
+        // Check if we need to ask for WoW path
+        if (string.IsNullOrEmpty(_config.WowPath) || !_config.IsWowPathValid())
         {
-            await Task.Delay(1000); // Wait 1 second for UI
-            await Dispatcher.UIThread.InvokeAsync(() =>
+            Console.WriteLine("[CONSTRUCTOR] WoW path not set or invalid - will prompt user");
+            StatusText = "Wähle WoW-Verzeichnis...";
+            StatusColor = "#FFA500";
+        }
+        else
+        {
+            Console.WriteLine("[CONSTRUCTOR] Valid WoW path found, starting monitoring");
+            StatusText = "Starting...";
+            StatusColor = "#FFA500";
+
+            // Start monitoring after a short delay to ensure UI is ready
+            Task.Run(async () =>
             {
-                Console.WriteLine("[CONSTRUCTOR] Now calling StartMonitoring()");
-                StartMonitoring();
+                await Task.Delay(1000); // Wait 1 second for UI
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    Console.WriteLine("[CONSTRUCTOR] Now calling StartMonitoring()");
+                    StartMonitoring();
+                });
             });
-        });
+        }
     }
 
     public void SetMainWindow(Window window)
     {
         _mainWindow = window;
+        Console.WriteLine("[SetMainWindow] MainWindow set");
 
-        // Only check WoW path if not already monitoring
-        if (!IsMonitoring && !_config.IsWowPathValid())
+        // Check if we need to ask for WoW path
+        if (string.IsNullOrEmpty(_config.WowPath) || !_config.IsWowPathValid())
         {
-            Console.WriteLine("[SetMainWindow] Window set, WoW path invalid - prompting user");
+            Console.WriteLine("[SetMainWindow] WoW path not set or invalid - prompting user");
             Dispatcher.UIThread.InvokeAsync(async () => await CheckWowPathAndStartAsync());
         }
-        else if (IsMonitoring)
+        else if (!IsMonitoring)
         {
-            Console.WriteLine("[SetMainWindow] Already monitoring - skipping initialization");
+            Console.WriteLine("[SetMainWindow] Valid WoW path found, starting monitoring");
+            StartMonitoring();
+        }
+        else
+        {
+            Console.WriteLine("[SetMainWindow] Already monitoring");
         }
     }
 
@@ -149,6 +164,41 @@ public class MainWindowViewModel : ViewModelBase
     {
         Console.WriteLine("[ManualRefresh] User requested manual refresh");
         Task.Run(async () => await RefreshDataAsync());
+    }
+
+    // Method to process selected WoW path
+    public async Task ProcessSelectedWowPath(string selectedPath)
+    {
+        Console.WriteLine($"[ProcessSelectedWowPath] User selected: {selectedPath}");
+
+        // Update config with new path
+        _config.WowPath = selectedPath;
+        _config.Save();
+
+        // Verify it's a valid WoW installation
+        if (_config.IsWowPathValid())
+        {
+            Console.WriteLine("[ProcessSelectedWowPath] Valid WoW installation found!");
+            StatusText = "WoW-Installation gefunden!";
+            StatusColor = "#00FF00";
+
+            // Start monitoring if not already started
+            if (!IsMonitoring)
+            {
+                StartMonitoring();
+            }
+            else
+            {
+                // Just refresh if already monitoring
+                await RefreshDataAsync();
+            }
+        }
+        else
+        {
+            Console.WriteLine("[ProcessSelectedWowPath] Selected folder is not a valid WoW installation");
+            StatusText = "Ungültiges WoW-Verzeichnis! Wähle den _classic_era_ Ordner";
+            StatusColor = "#FF6B6B";
+        }
     }
 
     // Force sync to API
@@ -412,13 +462,39 @@ public class MainWindowViewModel : ViewModelBase
 
         try
         {
-            // SIMPLIFY: Just read the one SavedVariables file directly
-            string luaPath = @"G:\World of Warcraft\_classic_era_\WTF\Account\126652900#2\SavedVariables\CattosItemTracker.lua";
-            Console.WriteLine($"[RefreshDataAsync] Reading: {luaPath}");
+            // Use WoW path from config and search for SavedVariables
+            string wowPath = _config.WowPath;
+            string wtfPath = System.IO.Path.Combine(wowPath, "WTF", "Account");
 
-            if (!System.IO.File.Exists(luaPath))
+            Console.WriteLine($"[RefreshDataAsync] Searching for SavedVariables in: {wtfPath}");
+
+            // Find CattosItemTracker.lua in any account folder
+            string? luaPath = null;
+
+            if (System.IO.Directory.Exists(wtfPath))
             {
-                Console.WriteLine("[RefreshDataAsync] ERROR: SavedVariables file not found!");
+                // Search all account directories for the SavedVariables file
+                var accountDirs = System.IO.Directory.GetDirectories(wtfPath);
+                Console.WriteLine($"[RefreshDataAsync] Found {accountDirs.Length} account directories");
+
+                foreach (var accountDir in accountDirs)
+                {
+                    var possiblePath = System.IO.Path.Combine(accountDir, "SavedVariables", "CattosItemTracker.lua");
+                    Console.WriteLine($"[RefreshDataAsync] Checking: {possiblePath}");
+
+                    if (System.IO.File.Exists(possiblePath))
+                    {
+                        luaPath = possiblePath;
+                        Console.WriteLine($"[RefreshDataAsync] Found SavedVariables at: {luaPath}");
+                        break;
+                    }
+                }
+            }
+
+            if (string.IsNullOrEmpty(luaPath) || !System.IO.File.Exists(luaPath))
+            {
+                Console.WriteLine("[RefreshDataAsync] ERROR: CattosItemTracker.lua not found in any account!");
+                Console.WriteLine("[RefreshDataAsync] Make sure the WoW addon is installed and you did /reload");
                 return;
             }
 
